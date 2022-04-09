@@ -7,17 +7,22 @@
 import java.util.concurrent.Semaphore;
 
 
-public class RoadController{  
+public class RoadController extends Thread{
    // Creating a road which 1 person crossing max
    static Semaphore road = new Semaphore(1);
-   String name = "";
 
-   RoadController(East_village east){
-      this.name = "East Villager";
+   String name = "";
+   String waiting = "";
+
+   //need the change for the villagers
+   RoadController(West_village Village) {
+      this.name = Village.name;
+      this.waiting = Village.action();
    }
 
-   RoadController(West_village west){
-      this.name = "West Villager";
+   RoadController(East_village Village) {
+      this.name = Village.name;
+      this.waiting = Village.action();
    }
 
    public void run(){
@@ -26,18 +31,20 @@ public class RoadController{
          System.out.println(name + " : is trying to cross the road...");
          System.out.println("Is road available: " + road.availablePermits());
 
-         road.acquire();
-         System.out.println(name + " : can cross the road!");
 
+         road.acquire();
+
+         //Critical Section
          try {
-            System.out.println(name + " : is crossing the road");
+            System.out.println(name + " : can cross the road!");
+            System.out.println(waiting);
+            System.out.println("Is road available: " + road.availablePermits());
 
             //sleep for 1 seconds as in walking
             Thread.sleep(1000);
 
          
       } finally {
-
          //Realeasing after successful crossing the road
          System.out.println(name + " : finish crossing the road...");
          road.release();
@@ -59,9 +66,14 @@ public class RoadController{
 
 
       //RoadController t1 = new RoadController(east_villager);
-      east_villager.start();
-      west_villager.start();
+      RoadController East1 = new RoadController(west_villager);
+      RoadController West1 = new RoadController(east_villager);
+      RoadController East2 = new RoadController(west_villager);
+      RoadController West2 = new RoadController(east_villager);
+
+      East1.start();
+      West1.start();
+      East2.start();
+      West2.start();
    }
-
-
 }
