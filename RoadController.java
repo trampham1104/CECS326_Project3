@@ -14,7 +14,7 @@ public class RoadController extends Thread{
    String name = "";
    String waiting = "";
 
-   //need the change for the villagers
+   //Constructors for when a villager uses the road
    RoadController(West_village Village) {
       this.name = Village.name;
       this.waiting = Village.action();
@@ -25,12 +25,12 @@ public class RoadController extends Thread{
       this.waiting = Village.action();
    }
 
+   //Cross le Road
    public void run(){
 
       try {
          System.out.println(name + " : is trying to cross the road...");
          System.out.println("Is road available: " + road.availablePermits());
-
 
          road.acquire();
 
@@ -45,7 +45,7 @@ public class RoadController extends Thread{
 
          
       } finally {
-         //Realeasing after successful crossing the road
+         //Releasing after successful crossing the road
          System.out.println(name + " : finish crossing the road...");
          road.release();
          System.out.println("Is road available: " + road.availablePermits());
@@ -56,7 +56,7 @@ public class RoadController extends Thread{
         }
       }
 
-   
+   //Running the Program and creating Villagers
    public static void main(String[] a){
       System.out.println("Is road available: " + road.availablePermits());
 
@@ -66,10 +66,10 @@ public class RoadController extends Thread{
 
 
       //RoadController t1 = new RoadController(east_villager);
-      RoadController East1 = new RoadController(west_villager);
-      RoadController West1 = new RoadController(east_villager);
-      RoadController East2 = new RoadController(west_villager);
-      RoadController West2 = new RoadController(east_villager);
+      RoadController East1 = new RoadController(east_villager);
+      RoadController West1 = new RoadController(west_villager);
+      RoadController East2 = new RoadController(east_villager);
+      RoadController West2 = new RoadController(west_villager);
 
       East1.start();
       West1.start();
